@@ -99,7 +99,7 @@ class Store {
                 password_salt TEXT NOT NULL,
                 password_hash TEXT NOT NULL,
                 role TEXT NOT NULL CHECK (role IN ('Student', 'Faculty', 'Admin')),
-                status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('pending', 'active', 'rejected')),
+                status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'active', 'rejected')),
                 google_sub TEXT,
                 email TEXT,
                 created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -132,7 +132,7 @@ class Store {
         `);
         const userColumns = this.sqlite.prepare("PRAGMA table_info(users)").all();
         if (!userColumns.some((column) => column.name === "status")) {
-            this.sqlite.exec("ALTER TABLE users ADD COLUMN status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('pending', 'active', 'rejected'))");
+            this.sqlite.exec("ALTER TABLE users ADD COLUMN status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'active', 'rejected'))");
         }
         if (!userColumns.some((column) => column.name === "google_sub")) {
             this.sqlite.exec("ALTER TABLE users ADD COLUMN google_sub TEXT");
@@ -306,9 +306,15 @@ class Store {
         return this.sqlite.prepare("SELECT * FROM users WHERE username = ? COLLATE NOCASE").get(username) || null;
     }
 
-    async getActiveUserByUsername(username) {
-        if (this.mongo) return this.collections.users.findOne({ username_lower: username.toLowerCase(), status: { $in: ["active", "Admin"] } });
-        return this.sqlite.prepare("SELECT * FROM users WHERE username = ? COLLATE NOCASE AND status = 'active'").get(username) || null;
+    async listPendingUsers() {
+        if (this.mongo) {
+            return this.collections.users.find({ status: "pending" }, {
+                projection: { id: 1, username: 1, role: 1, status: 1, created_at: 1 }
+            }).sort({ created_at: 1 }).toArray();
+        }
+        return this.sqlite.prepare(`
+            SELECT id, username, role, status, created_at FROM users WHERE status = 'pending' ORDER BY created_at ASC
+        `).all();
     }
 
     async getUserByGoogleSub(sub) {
@@ -335,6 +341,7 @@ class Store {
     }
 
     async createUser(userData) {
+        const status = userData.status || "pending";
         if (this.mongo) {
             const result = await this.collections.counters.findOneAndUpdate(
                 { _id: "users" },
@@ -344,7 +351,7 @@ class Store {
             const user = normalizeUser({
                 ...userData,
                 id: result.value,
-                status: userData.status || "active",
+                status,
                 created_at: sqliteTimestamp()
             });
             try {
@@ -359,7 +366,7 @@ class Store {
             INSERT INTO users (username, password_salt, password_hash, role, status, google_sub, email)
             VALUES (?, ?, ?, ?, ?, ?, ?)
         `).run(userData.username, userData.password_salt, userData.password_hash, userData.role,
-            userData.status || "active", userData.google_sub || null, userData.email || null);
+            status, userData.google_sub || null, userData.email || null);
         return this.getPublicUserById(result.lastInsertRowid);
     }
 
