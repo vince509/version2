@@ -32,7 +32,7 @@ if (PUBLIC_ORIGIN) {
 }
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "";
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || "";
-const ALLOW_PASSWORD_SIGNUP = !IS_VERCEL && process.env.ALLOW_PASSWORD_SIGNUP !== "false";
+const ALLOW_PASSWORD_SIGNUP = process.env.ALLOW_PASSWORD_SIGNUP !== "false";
 if (Boolean(GOOGLE_CLIENT_ID) !== Boolean(GOOGLE_CLIENT_SECRET)) {
     throw new Error("Set both GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to enable Google sign-in.");
 }
@@ -355,7 +355,8 @@ app.post("/api/auth/register", rateLimitAuth, async (request, response, next) =>
         const username = cleanText(request.body.username, "Username", 32);
         const password = request.body.password;
         const accountCount = await store.userCount();
-        if (!ALLOW_PASSWORD_SIGNUP && (accountCount > 0 || IS_VERCEL)) {
+        const canSelfRegister = ALLOW_PASSWORD_SIGNUP || accountCount === 0;
+        if (!canSelfRegister) {
             throw new HttpError(403, "Password sign-up is disabled. Ask an Admin to create your account.");
         }
         if (typeof password !== "string") throw new HttpError(400, "Password is required.");
@@ -422,7 +423,7 @@ app.get("/api/auth/config", async (request, response, next) => {
     try {
         response.json({
             googleEnabled: Boolean(googleOAuth && isPublicOriginRequest(request)),
-            passwordSignupEnabled: ALLOW_PASSWORD_SIGNUP || (!IS_VERCEL && await store.userCount() === 0),
+            passwordSignupEnabled: ALLOW_PASSWORD_SIGNUP || (await store.userCount()) === 0,
             directUploads: fileStore.usesRemoteStorage
         });
     } catch (error) {
