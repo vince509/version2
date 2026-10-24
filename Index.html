@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f7f7f2">
+    <meta name="description" content="A little corner of the internet for good ideas and fresh starts.">
+    <title>Good Things — A fresh start</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --ink: #202820;
+            --muted: #687168;
+            --green: #315d43;
+            --green-dark: #234632;
+            --paper: #f7f7f2;
+            --white: #fff;
+            --line: #e5e8df;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            background: var(--paper);
+            color: var(--ink);
+            font-family: "Segoe UI", Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        .site-header {
+            width: min(1100px, calc(100% - 48px));
+            min-height: 82px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--ink);
+            font-size: 1.05rem;
+            font-weight: 750;
+            letter-spacing: -0.04em;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            width: 30px;
+            height: 30px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: #e1eadf;
+            color: var(--green);
+            font-size: 1rem;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--muted);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 160ms ease;
+        }
+
+        nav a:hover,
+        nav a:focus-visible {
+            color: var(--green);
+        }
+
+        .hero {
+            width: min(1100px, calc(100% - 48px));
+            min-height: 490px;
+            margin: 12px auto 0;
+            padding: 76px 9%;
+            display: flex;
+            align-items: center;
+            border-radius: 28px;
+            background:
+                radial-gradient(ellipse at 82% 22%, rgba(205, 220, 189, 0.52), transparent 31%),
+                radial-gradient(ellipse at 100% 100%, rgba(241, 222, 188, 0.48), transparent 34%),
+                #edf0e7;
+        }
+
+        .hero-content {
+            max-width: 620px;
+        }
+
+        .eyebrow {
+            margin: 0 0 18px;
+            color: var(--green);
+            font-size: 0.75rem;
+            font-weight: 750;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin-top: 0;
+        }
+
+        h1 {
+            max-width: 600px;
+            margin-bottom: 20px;
+            font-size: clamp(3rem, 7vw, 5.3rem);
+            font-weight: 650;
+            letter-spacing: -0.075em;
+            line-height: 0.99;
+        }
+
+        .hero-copy {
+            max-width: 470px;
+            margin-bottom: 30px;
+            color: #5f695f;
+            font-size: 1.08rem;
+        }
+
+        .button {
+            min-height: 48px;
+            padding: 0 21px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 0;
+            border-radius: 999px;
+            background: var(--green);
+            color: var(--white);
+            font: inherit;
+            font-size: 0.9rem;
+            font-weight: 650;
+            text-decoration: none;
+            transition: background 160ms ease, transform 160ms ease;
+        }
+
+        .button:hover,
+        .button:focus-visible {
+            transform: translateY(-2px);
+            background: var(--green-dark);
+        }
+
+        .button-outline {
+            min-height: 40px;
+            padding: 0 17px;
+            border: 1px solid #d8dfd5;
+            background: transparent;
+            color: var(--green);
+        }
+
+        .button-outline:hover,
+        .button-outline:focus-visible {
+            border-color: var(--green);
+            background: #edf2e9;
+            color: var(--green-dark);
+        }
+
+        .login-dialog {
+            width: min(440px, calc(100% - 32px));
+            max-width: none;
+            padding: 34px;
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            background: var(--paper);
+            color: var(--ink);
+            box-shadow: 0 24px 80px rgba(24, 39, 28, 0.22);
+        }
+
+        .login-dialog::backdrop {
+            background: rgba(25, 36, 27, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        .dialog-top {
+            margin-bottom: 22px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .dialog-top .eyebrow {
+            margin-bottom: 8px;
+        }
+
+        .dialog-top h2 {
+            margin-bottom: 0;
+            font-size: 2rem;
+            letter-spacing: -0.06em;
+            line-height: 1.1;
+        }
+
+        .dialog-close {
+            width: 38px;
+            height: 38px;
+            flex: 0 0 auto;
+            display: grid;
+            place-items: center;
+            border: 1px solid var(--line);
+            border-radius: 50%;
+            background: var(--white);
+            color: var(--muted);
+            font: inherit;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .login-form {
+            display: grid;
+            gap: 16px;
+        }
+
+        .login-form label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--ink);
+            font-size: 0.88rem;
+            font-weight: 650;
+        }
+
+        .login-form input[type="email"],
+        .login-form input[type="password"],
+        .login-form input[type="text"] {
+            width: 100%;
+            min-height: 46px;
+            padding: 0 13px;
+            border: 1px solid #d8dfd5;
+            border-radius: 10px;
+            background: var(--white);
+            color: var(--ink);
+            font: inherit;
+        }
+
+        .login-form input:focus {
+            border-color: var(--green);
+        }
+
+        .password-wrap {
+            position: relative;
+        }
+
+        .password-wrap input {
+            padding-right: 66px !important;
+        }
+
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            padding: 4px 0;
+            transform: translateY(-50%);
+            border: 0;
+            background: transparent;
+            color: var(--green);
+            font: inherit;
+            font-size: 0.8rem;
+            font-weight: 650;
+            cursor: pointer;
+        }
+
+        .form-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .remember-option {
+            display: inline-flex !important;
+            align-items: center;
+            gap: 8px;
+            margin: 0 !important;
+            color: var(--muted) !important;
+            font-size: 0.82rem !important;
+            font-weight: 500 !important;
+        }
+
+        .remember-option input {
+            accent-color: var(--green);
+        }
+
+        .login-form .button {
+            width: 100%;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+
+        .demo-note,
+        .login-message {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
+
+        .login-message {
+            padding: 12px;
+            border-radius: 10px;
+            background: #e9eee5;
+            color: var(--green-dark);
+        }
+
+        .login-message[hidden] {
+            display: none;
+        }
+
+        .section {
+            width: min(1100px, calc(100% - 48px));
+            margin: 0 auto;
+            padding: 88px 0;
+        }
+
+        .section-heading {
+            max-width: 540px;
+            margin-bottom: 34px;
+        }
+
+        .section-heading h2 {
+            margin-bottom: 10px;
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 650;
+            letter-spacing: -0.06em;
+            line-height: 1.1;
+        }
+
+        .section-heading p {
+            margin-bottom: 0;
+            color: var(--muted);
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .card {
+            min-height: 210px;
+            padding: 26px;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: var(--white);
+        }
+
+        .card-number {
+            width: 36px;
+            height: 36px;
+            margin-bottom: 24px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: #edf2e9;
+            color: var(--green);
+            font-size: 0.8rem;
+            font-weight: 750;
+        }
+
+        .card h3 {
+            margin-bottom: 8px;
+            font-size: 1.08rem;
+            letter-spacing: -0.025em;
+        }
+
+        .card p {
+            margin-bottom: 0;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        .contact {
+            padding: 37px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            border-radius: 20px;
+            background: #e9eee5;
+        }
+
+        .contact h2 {
+            margin-bottom: 6px;
+            font-size: clamp(1.6rem, 3vw, 2.1rem);
+            letter-spacing: -0.05em;
+        }
+
+        .contact p {
+            margin-bottom: 0;
+            color: var(--muted);
+        }
+
+        .site-footer {
+            width: min(1100px, calc(100% - 48px));
+            margin: 0 auto;
+            padding: 22px 0 30px;
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            border-top: 1px solid var(--line);
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
+
+        .site-footer p {
+            margin: 0;
+        }
+
+        :focus-visible {
+            outline: 3px solid #8aaa77;
+            outline-offset: 4px;
+        }
+
+        @media (max-width: 680px) {
+            .site-header {
+                min-height: 72px;
+            }
+
+            nav {
+                gap: 16px;
+            }
+
+            nav a {
+                font-size: 0.82rem;
+            }
+
+            .hero {
+                min-height: 420px;
+                padding: 58px 8%;
+                border-radius: 22px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                min-height: 0;
+            }
+
+            .contact {
+                align-items: flex-start;
+                flex-direction: column;
+                padding: 28px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .site-header,
+            .hero,
+            .section,
+            .site-footer {
+                width: calc(100% - 32px);
+            }
+
+            .site-header {
+                flex-wrap: wrap;
+                gap: 10px;
+                padding: 12px 0;
+            }
+
+            nav {
+                width: 100%;
+                justify-content: space-between;
+                gap: 12px;
+            }
+
+            nav a {
+                font-size: 0.76rem;
+            }
+
+            .button-outline {
+                min-height: 36px;
+                padding: 0 12px;
+            }
+
+            .brand {
+                font-size: 0.96rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            *,
+            *::before,
+            *::after {
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="#" aria-label="Good Things home">
+            <span class="brand-mark" aria-hidden="true">✳</span>
+            Good Things
+        </a>
+        <nav aria-label="Main navigation">
+            <a href="#about">About</a>
+            <a href="#ideas">What matters</a>
+            <a href="#contact">Say hello</a>
+            <button class="button button-outline" id="open-login" type="button">Log in</button>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-content">
+                <p class="eyebrow">A little corner of the internet</p>
+                <h1 id="hero-title">Make room for good things.</h1>
+                <p class="hero-copy">A fresh start, a thoughtful idea, or simply a moment to pause. It all begins somewhere.</p>
+                <a class="button" href="#about">Take a look <span aria-hidden="true">&nbsp;→</span></a>
+            </div>
+        </section>
+
+        <section class="section" id="about" aria-labelledby="about-title">
+            <div class="section-heading">
+                <p class="eyebrow">A simple reminder</p>
+                <h2 id="about-title">Small steps can lead somewhere wonderful.</h2>
+                <p>You don't need a perfect plan. Start with what feels meaningful, stay curious, and let the rest unfold.</p>
+            </div>
+
+            <div class="cards" id="ideas">
+                <article class="card">
+                    <span class="card-number" aria-hidden="true">01</span>
+                    <h3>Stay curious</h3>
+                    <p>Ask questions, notice the details, and keep making space for new ideas.</p>
+                </article>
+                <article class="card">
+                    <span class="card-number" aria-hidden="true">02</span>
+                    <h3>Keep it simple</h3>
+                    <p>Focus on the next small thing you can do. Progress doesn't have to be complicated.</p>
+                </article>
+                <article class="card">
+                    <span class="card-number" aria-hidden="true">03</span>
+                    <h3>Make it yours</h3>
+                    <p>There isn't one right way to begin. Follow what matters to you.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section" id="contact" aria-labelledby="contact-title">
+            <div class="contact">
+                <div>
+                    <h2 id="contact-title">Here's to what comes next.</h2>
+                    <p>Thanks for stopping by. Take the good feeling with you.</p>
+                </div>
+                <a class="button" href="mailto:hello@example.com">Say hello <span aria-hidden="true">&nbsp;→</span></a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>© 2026 Good Things</p>
+        <p>Made for a fresh start.</p>
+    </footer>
+
+    <dialog class="login-dialog" id="login-dialog" aria-labelledby="login-title">
+        <div class="dialog-top">
+            <div>
+                <p class="eyebrow">Welcome back</p>
+                <h2 id="login-title">Log in</h2>
+            </div>
+            <button class="dialog-close" id="close-login" type="button" aria-label="Close login form">×</button>
+        </div>
+        <form class="login-form" id="login-form">
+            <div>
+                <label for="login-email">Email address</label>
+                <input id="login-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+            </div>
+            <div>
+                <label for="login-password">Password</label>
+                <div class="password-wrap">
+                    <input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required minlength="8">
+                    <button class="password-toggle" id="toggle-password" type="button" aria-label="Show password" aria-pressed="false">Show</button>
+                </div>
+            </div>
+            <div class="form-options">
+                <label class="remember-option" for="remember-me">
+                    <input id="remember-me" name="remember" type="checkbox">
+                    Remember me
+                </label>
+            </div>
+            <button class="button" type="submit">Log in</button>
+            <p class="demo-note">This is a front-end demo. It does not create an account or send your details.</p>
+            <p class="login-message" id="login-message" role="status" aria-live="polite" hidden></p>
+        </form>
+    </dialog>
+
+    <script>
+        const loginDialog = document.querySelector("#login-dialog");
+        const loginForm = document.querySelector("#login-form");
+        const loginEmail = document.querySelector("#login-email");
+        const loginPassword = document.querySelector("#login-password");
+        const loginMessage = document.querySelector("#login-message");
+        const togglePassword = document.querySelector("#toggle-password");
+
+        document.querySelector("#open-login").addEventListener("click", () => {
+            loginMessage.hidden = true;
+            loginDialog.showModal();
+            loginEmail.focus();
+        });
+
+        document.querySelector("#close-login").addEventListener("click", () => {
+            loginDialog.close();
+        });
+
+        loginDialog.addEventListener("click", (event) => {
+            if (event.target === loginDialog) {
+                loginDialog.close();
+            }
+        });
+
+        togglePassword.addEventListener("click", () => {
+            const passwordIsVisible = loginPassword.type === "text";
+            loginPassword.type = passwordIsVisible ? "password" : "text";
+            togglePassword.textContent = passwordIsVisible ? "Show" : "Hide";
+            togglePassword.setAttribute("aria-label", passwordIsVisible ? "Show password" : "Hide password");
+            togglePassword.setAttribute("aria-pressed", String(!passwordIsVisible));
+        });
+
+        loginForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            if (!loginForm.reportValidity()) {
+                return;
+            }
+
+            loginMessage.textContent = "The demo form is working, but it does not sign you in or store your details.";
+            loginMessage.hidden = false;
+        });
+    </script>
+</body>
+</html>

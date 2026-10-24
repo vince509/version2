@@ -1,0 +1,4 @@
+{
+  "framework": "express",
+  "buildCommand": "npm run build"
+}

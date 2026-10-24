@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f7f5">
+    <meta name="description" content="Explore and discover student research at STI College Alaminos.">
+    <title>Research Hub | STI College Alaminos</title>
+    <link rel="stylesheet" href="researchpart2.css">
+    <script src="part3.script.js" defer></script>
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar" aria-label="Main navigation">
+            <a class="brand" href="#home">
+                <img class="brand-mark" src="sti-logo.png" alt="">
+                <span><strong>Research Hub</strong><small>STI College Alaminos</small></span>
+            </a>
+            <p class="nav-caption">Workspace</p>
+            <nav class="side-nav">
+                <a class="nav-link active" href="#repository"><span aria-hidden="true">▤</span> Repository</a>
+                <a class="nav-link" href="#search"><span aria-hidden="true">⌕</span> Smart search</a>
+                <a class="nav-link" href="#assistant"><span aria-hidden="true">✳</span> Research assistant</a>
+                <a class="nav-link" href="#project-info"><span aria-hidden="true">ⓘ</span> About the project</a>
+            </nav>
+            <div class="sidebar-bottom">
+                <div class="sidebar-callout">
+                    <span class="callout-icon" aria-hidden="true">✦</span>
+                    <strong>Good research starts here.</strong>
+                    <p>Explore capstones, studies, and ideas from the STI Alaminos community.</p>
+                </div>
+                <p class="sidebar-footnote">Private local repository<br>Stored on this computer</p>
+            </div>
+        </aside>
+
+        <main class="main-area" id="home">
+            <header class="topbar">
+                <div class="breadcrumb">Library <span aria-hidden="true">/</span> <strong>Research repository</strong></div>
+                <div class="topbar-right">
+                    <span class="prototype-badge"><span aria-hidden="true">●</span> LOCAL APP</span>
+                    <span class="current-user" id="current-user" hidden></span>
+                    <button class="button button-light" id="submissions-button" type="button" hidden>My submissions</button>
+                    <button class="button button-light" id="review-button" type="button" hidden>Review submissions</button>
+                    <button class="button button-light" id="users-button" type="button" hidden>Manage users</button>
+                    <button class="button button-light" id="login-button" type="button">Log in</button>
+                </div>
+            </header>
+
+            <div class="page-wrap">
+                <section class="welcome" aria-labelledby="page-title">
+                    <div>
+                        <p class="eyebrow">STI COLLEGE ALAMINOS</p>
+                        <h1 id="page-title">Find the work that moves you.</h1>
+                        <p class="welcome-description">A home for student research, capstone projects, and shared knowledge.</p>
+                    </div>
+                    <button class="button" id="upload-button" type="button" disabled>＋ Add a paper</button>
+                </section>
+
+                <section class="overview-grid" aria-label="Repository overview">
+                    <article class="overview-card">
+                        <span class="overview-icon icon-leaf" aria-hidden="true">▤</span>
+                        <div><strong id="paper-count">0</strong><span>Research papers</span></div>
+                    </article>
+                    <article class="overview-card">
+                        <span class="overview-icon icon-sun" aria-hidden="true">⌕</span>
+                        <div><strong>Explore</strong><span>By topic, course, or question</span></div>
+                    </article>
+                    <article class="overview-card">
+                        <span class="overview-icon icon-blue" aria-hidden="true">◷</span>
+                        <div><strong>Anytime</strong><span>Designed for every screen</span></div>
+                    </article>
+                </section>
+
+                <section class="search-box" id="search" aria-labelledby="search-title">
+                    <div class="search-heading">
+                        <div>
+                            <p class="eyebrow">DISCOVER SOMETHING NEW</p>
+                            <h2 id="search-title">What are you looking for?</h2>
+                        </div>
+                        <span class="search-decoration" aria-hidden="true">✳</span>
+                    </div>
+                    <form class="search-form" id="search-form">
+                        <label class="search-input-wrap">
+                            <span aria-hidden="true">⌕</span>
+                            <input id="search-input" type="search" placeholder="Ask a question or search a title, topic, author…" aria-label="Search academic papers">
+                        </label>
+                        <button class="button" type="submit">Search papers <span aria-hidden="true">→</span></button>
+                    </form>
+                    <div class="quick-searches">
+                        <span>Popular:</span>
+                        <button type="button" data-query="artificial intelligence">Artificial intelligence</button>
+                        <button type="button" data-query="student learning">Student learning</button>
+                        <button type="button" data-query="mobile application">Mobile apps</button>
+                    </div>
+                </section>
+
+                <div class="content-grid">
+                    <section class="section-card repository" id="repository" aria-labelledby="repository-title">
+                        <header class="section-header">
+                            <div>
+                                <p class="eyebrow">THE COLLECTION</p>
+                                <h2 id="repository-title">Research papers</h2>
+                                <p class="section-subtitle" id="result-count" aria-live="polite">Loading papers…</p>
+                            </div>
+                            <div class="filter-group">
+                                <label class="filter-wrap">
+                                    <span class="sr-only">Filter by topic</span>
+                                    <select id="topic-filter" aria-label="Filter by topic"><option value="all">All topics</option></select>
+                                </label>
+                                <label class="filter-wrap">
+                                    <span class="sr-only">Filter by course</span>
+                                    <select id="course-filter" aria-label="Filter by course"><option value="all">All courses</option></select>
+                                </label>
+                            </div>
+                        </header>
+                        <div id="document-list" aria-live="polite"></div>
+                        <p class="empty-state" id="empty-state" hidden>No papers found. Try another search or topic.</p>
+                    </section>
+
+                    <section class="section-card assistant" id="assistant" aria-labelledby="assistant-title">
+                        <header class="section-header assistant-header">
+                            <span class="assistant-avatar" aria-hidden="true">✳</span>
+                            <div>
+                                <p class="eyebrow">YOUR RESEARCH COMPANION</p>
+                                <h2 id="assistant-title">Research assistant</h2>
+                                <p class="section-subtitle"><span class="online-dot"></span> Free local search · your saved papers</p>
+                            </div>
+                        </header>
+                        <div class="chat-messages" id="chat-messages" aria-live="polite" aria-label="Assistant conversation">
+                            <div class="chat-bubble assistant-bubble">Hi! I can search the papers in your local library, summarize saved abstracts, and compare research records. Try asking “Find research about online learning.”</div>
+                        </div>
+                        <div class="suggestion-row" id="chat-suggestions" aria-label="Suggested questions">
+                            <button class="suggestion" type="button" data-question="Find papers about artificial intelligence">AI research</button>
+                            <button class="suggestion" type="button" data-question="What research is about student learning?">Student learning</button>
+                        </div>
+                        <form class="chat-form" id="chat-form">
+                            <input id="chat-input" type="text" placeholder="Ask a research question…" aria-label="Ask a research question" required>
+                            <button type="submit" aria-label="Send message">↑</button>
+                        </form>
+                        <p class="chat-note">Search runs on this computer at no AI API cost. Upload real research files to build the library.</p>
+                    </section>
+                </div>
+
+                <aside class="prototype-note" id="project-info">
+                    <span aria-hidden="true">ⓘ</span>
+                    <p><strong>Private local library</strong> — Accounts, paper details, and uploaded documents are stored on this computer. The assistant uses free local search of your saved titles and abstracts; it does not send them to an AI provider.</p>
+                </aside>
+                <footer class="page-footer">STI College Alaminos · Private local research library</footer>
+            </div>
+        </main>
+    </div>
+
+    <dialog class="modal" id="login-modal" aria-labelledby="login-title">
+        <header class="modal-header">
+            <div><p class="eyebrow">STI ALAMINOS RESEARCH LIBRARY</p><h2 id="login-title">Log in</h2></div>
+            <button class="modal-close" type="button" data-close="login-modal" aria-label="Close login">×</button>
+        </header>
+        <form class="modal-body form-stack" id="login-form">
+            <p class="modal-explanation" id="login-help">Sign in to your personal local library account.</p>
+            <label class="form-field">Username<input id="login-username" name="username" autocomplete="username" minlength="3" maxlength="32" required></label>
+            <label class="form-field">Password<input id="login-password" name="password" type="password" autocomplete="current-password" minlength="10" maxlength="200" required></label>
+            <label class="remember-option"><input id="remember-login" name="remember" type="checkbox"> Keep me signed in on this computer</label>
+            <button class="text-link" id="forgot-password" type="button">Forgot password?</button>
+            <p class="form-message" id="login-message" role="status" aria-live="polite"></p>
+            <button class="button button-wide" type="submit">Continue</button>
+            <a class="google-login-button" id="google-login-button" href="/auth/google" hidden>Continue with Google</a>
+            <p class="google-login-note" id="google-login-note" hidden>Only Google accounts added as testers in Google Cloud can sign in.</p>
+            <p class="auth-switch" id="auth-switch">New here? <button class="text-link" id="auth-switch-button" type="button">Create an account</button></p>
+        </form>
+    </dialog>
+
+    <dialog class="modal modal-wide" id="paper-modal" aria-labelledby="paper-modal-title">
+        <header class="modal-header">
+            <div><p class="eyebrow" id="paper-modal-kicker">PAPER DETAILS</p><h2 id="paper-modal-title">Paper</h2></div>
+            <button class="modal-close" type="button" data-close="paper-modal" aria-label="Close paper details">×</button>
+        </header>
+        <div class="modal-body" id="paper-modal-body"></div>
+    </dialog>
+
+    <dialog class="modal" id="paper-form-modal" aria-labelledby="paper-form-title">
+        <header class="modal-header">
+            <div><p class="eyebrow">REPOSITORY MANAGEMENT</p><h2 id="paper-form-title">Add a research paper</h2></div>
+            <button class="modal-close" type="button" data-close="paper-form-modal" aria-label="Close paper form">×</button>
+        </header>
+        <form class="modal-body form-stack" id="paper-form">
+            <p class="modal-explanation">PDF, DOCX, and TXT files are saved in the research library (10 MB maximum).</p>
+            <input id="paper-id" type="hidden">
+            <label class="form-field">Title<input id="paper-title" name="title" required></label>
+            <label class="form-field">Author(s)<input id="paper-author" name="author" required></label>
+            <div class="form-row">
+                <label class="form-field">Year<input id="paper-year" name="year" type="number" min="2000" max="2100" value="2026" required></label>
+                <label class="form-field">Topic<input id="paper-topic" name="topic" required></label>
+            </div>
+            <div class="form-row">
+                <label class="form-field">Course<input id="paper-course" name="course" required></label>
+                <label class="form-field">Department<input id="paper-department" name="department" required></label>
+            </div>
+            <label class="form-field">Abstract<textarea id="paper-abstract" name="abstract" rows="4" required></textarea></label>
+            <label class="form-field">Research file (PDF, DOCX, or TXT)<input id="paper-file" name="file" type="file" accept=".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"><small id="file-help">The selected file is stored by the research library.</small></label>
+            <p class="form-message" id="paper-form-message" role="status"></p>
+            <div class="modal-actions"><button class="button button-light" type="button" data-close="paper-form-modal">Cancel</button><button class="button" id="paper-submit-button" type="submit">Save paper</button></div>
+        </form>
+    </dialog>
+
+    <dialog class="modal modal-wide" id="review-modal" aria-labelledby="review-title">
+        <header class="modal-header">
+            <div><p class="eyebrow">ADMINISTRATION</p><h2 id="review-title">Review student submissions</h2></div>
+            <button class="modal-close" type="button" data-close="review-modal" aria-label="Close submissions review">×</button>
+        </header>
+        <div class="modal-body">
+            <p class="modal-explanation">Approve a submission to publish it in the searchable library, or reject it. Rejected documents are removed from local storage.</p>
+            <div class="submission-list" id="pending-list" aria-live="polite"></div>
+        </div>
+    </dialog>
+
+    <dialog class="modal modal-wide" id="submissions-modal" aria-labelledby="submissions-title">
+        <header class="modal-header">
+            <div><p class="eyebrow">YOUR PAPERS</p><h2 id="submissions-title">My submissions</h2></div>
+            <button class="modal-close" type="button" data-close="submissions-modal" aria-label="Close my submissions">×</button>
+        </header>
+        <div class="modal-body">
+            <p class="modal-explanation">Student submissions are checked by an Admin before they appear in the shared library.</p>
+            <div class="submission-list" id="my-submissions-list" aria-live="polite"></div>
+        </div>
+    </dialog>
+
+    <dialog class="modal modal-wide" id="users-modal" aria-labelledby="users-title">
+        <header class="modal-header">
+            <div><p class="eyebrow">ADMINISTRATION</p><h2 id="users-title">Manage accounts</h2></div>
+            <button class="modal-close" type="button" data-close="users-modal" aria-label="Close user management">×</button>
+        </header>
+        <div class="modal-body">
+            <p class="modal-explanation">Accounts are saved in the local database. New users can register as Students; only an Admin can grant Faculty or Admin access.</p>
+            <form class="user-add-form" id="user-form">
+                <label class="form-field">Username<input id="new-username" required></label>
+                <label class="form-field">Password<input id="new-user-password" type="password" minlength="10" required></label>
+                <label class="form-field">Role<select id="new-user-role"><option>Student</option><option>Faculty</option><option>Admin</option></select></label>
+                <button class="button" type="submit">Add user</button>
+            </form>
+            <div class="user-list" id="user-list"></div>
+        </div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
