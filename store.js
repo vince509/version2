@@ -18,6 +18,7 @@ function normalizeUser(user) {
         password_salt: user.password_salt,
         password_hash: user.password_hash,
         role: user.role,
+        status: user.status || "active",
         google_sub: user.google_sub || null,
         email: user.email || null,
         email_lower: user.email_lower || (user.email ? user.email.toLowerCase() : null),
@@ -98,6 +99,7 @@ class Store {
                 password_salt TEXT NOT NULL,
                 password_hash TEXT NOT NULL,
                 role TEXT NOT NULL CHECK (role IN ('Student', 'Faculty', 'Admin')),
+                status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('pending', 'active', 'rejected')),
                 google_sub TEXT,
                 email TEXT,
                 created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -129,6 +131,9 @@ class Store {
             CREATE INDEX IF NOT EXISTS papers_year ON papers(year DESC);
         `);
         const userColumns = this.sqlite.prepare("PRAGMA table_info(users)").all();
+        if (!userColumns.some((column) => column.name === "status")) {
+            this.sqlite.exec("ALTER TABLE users ADD COLUMN status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('pending', 'active', 'rejected'))");
+        }
         if (!userColumns.some((column) => column.name === "google_sub")) {
             this.sqlite.exec("ALTER TABLE users ADD COLUMN google_sub TEXT");
         }
@@ -290,10 +295,10 @@ class Store {
         if (this.mongo) {
             return this.collections.users.findOne(
                 { id: numericId },
-                { projection: { id: 1, username: 1, role: 1, created_at: 1 } }
+                { projection: { id: 1, username: 1, role: 1, status: 1, created_at: 1 } }
             );
         }
-        return this.sqlite.prepare("SELECT id, username, role, created_at FROM users WHERE id = ?").get(numericId) || null;
+        return this.sqlite.prepare("SELECT id, username, role, status, created_at FROM users WHERE id = ?").get(numericId) || null;
     }
 
     async getUserByUsername(username) {
@@ -301,15 +306,20 @@ class Store {
         return this.sqlite.prepare("SELECT * FROM users WHERE username = ? COLLATE NOCASE").get(username) || null;
     }
 
+    async getActiveUserByUsername(username) {
+        if (this.mongo) return this.collections.users.findOne({ username_lower: username.toLowerCase(), status: { $in: ["active", "Admin"] } });
+        return this.sqlite.prepare("SELECT * FROM users WHERE username = ? COLLATE NOCASE AND status = 'active'").get(username) || null;
+    }
+
     async getUserByGoogleSub(sub) {
         if (this.mongo) {
             return this.collections.users.findOne(
                 { google_sub: sub },
-                { projection: { id: 1, username: 1, role: 1, created_at: 1 } }
+                { projection: { id: 1, username: 1, role: 1, status: 1, created_at: 1 } }
             );
         }
         return this.sqlite.prepare(`
-            SELECT id, username, role, created_at FROM users WHERE google_sub = ?
+            SELECT id, username, role, status, created_at FROM users WHERE google_sub = ?
         `).get(sub) || null;
     }
 
@@ -334,6 +344,7 @@ class Store {
             const user = normalizeUser({
                 ...userData,
                 id: result.value,
+                status: userData.status || "active",
                 created_at: sqliteTimestamp()
             });
             try {
@@ -345,10 +356,10 @@ class Store {
             }
         }
         const result = this.sqlite.prepare(`
-            INSERT INTO users (username, password_salt, password_hash, role, google_sub, email)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO users (username, password_salt, password_hash, role, status, google_sub, email)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         `).run(userData.username, userData.password_salt, userData.password_hash, userData.role,
-            userData.google_sub || null, userData.email || null);
+            userData.status || "active", userData.google_sub || null, userData.email || null);
         return this.getPublicUserById(result.lastInsertRowid);
     }
 
@@ -356,7 +367,7 @@ class Store {
         const numericId = Number(id);
         if (this.mongo) {
             const set = {};
-            for (const key of ["username", "role", "password_salt", "password_hash", "email", "google_sub"]) {
+            for (const key of ["username", "role", "status", "password_salt", "password_hash", "email", "google_sub"]) {
                 if (Object.prototype.hasOwnProperty.call(changes, key)) set[key] = changes[key];
             }
             if (changes.username !== undefined) set.username_lower = changes.username.toLowerCase();
@@ -371,10 +382,12 @@ class Store {
         }
         if (Object.prototype.hasOwnProperty.call(changes, "password_salt")) {
             this.sqlite.prepare(`
-                UPDATE users SET username = ?, role = ?, password_salt = ?, password_hash = ? WHERE id = ?
-            `).run(changes.username, changes.role, changes.password_salt, changes.password_hash, numericId);
+                UPDATE users SET username = ?, role = ?, status = ?, password_salt = ?, password_hash = ? WHERE id = ?
+            `).run(changes.username, changes.role, changes.status, changes.password_salt, changes.password_hash, numericId);
         } else if (Object.prototype.hasOwnProperty.call(changes, "email")) {
-            this.sqlite.prepare("UPDATE users SET email = ? WHERE id = ?").run(changes.email, numericId);
+            this.sqlite.prepare("UPDATE users SET username = ?, role = ?, status = ?, email = ? WHERE id = ?").run(changes.username, changes.role, changes.status, changes.email, numericId);
+        } else if (Object.prototype.hasOwnProperty.call(changes, "status")) {
+            this.sqlite.prepare("UPDATE users SET username = ?, role = ?, status = ? WHERE id = ?").run(changes.username, changes.role, changes.status, numericId);
         } else {
             this.sqlite.prepare("UPDATE users SET username = ?, role = ? WHERE id = ?")
                 .run(changes.username, changes.role, numericId);
@@ -385,11 +398,11 @@ class Store {
     async listUsers() {
         if (this.mongo) {
             return this.collections.users.find({}, {
-                projection: { id: 1, username: 1, role: 1, created_at: 1 }
+                projection: { id: 1, username: 1, role: 1, status: 1, created_at: 1 }
             }).sort({ username_lower: 1 }).toArray();
         }
         return this.sqlite.prepare(`
-            SELECT id, username, role, created_at FROM users ORDER BY username COLLATE NOCASE
+            SELECT id, username, role, status, created_at FROM users ORDER BY username COLLATE NOCASE
         `).all();
     }
 
@@ -412,12 +425,12 @@ class Store {
             if (!session) return null;
             const user = await this.collections.users.findOne(
                 { id: session.user_id },
-                { projection: { id: 1, username: 1, role: 1, created_at: 1 } }
+                { projection: { id: 1, username: 1, role: 1, status: 1, created_at: 1 } }
             );
             return user ? { ...user, expires_at: session.expires_at, idle_expires_at: session.idle_expires_at } : null;
         }
         return this.sqlite.prepare(`
-            SELECT users.id, users.username, users.role, users.created_at,
+            SELECT users.id, users.username, users.role, users.status, users.created_at,
                    sessions.expires_at, sessions.idle_expires_at
             FROM sessions JOIN users ON users.id = sessions.user_id
             WHERE sessions.token_hash = ?
