@@ -1,138 +1,558 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Research Hub</title>
-  <link rel="stylesheet" href="researchpart2.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f7f5">
+    <meta name="description" content="Explore and discover student research at STI College Alaminos.">
+    <title>Research Hub | STI College Alaminos</title>
+    <link rel="stylesheet" href="researchpart2.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #edf4ee;
+            color: #1c2b2d;
+        }
+        .app-shell {
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar {
+            width: 290px;
+            background: #ffffff;
+            border-right: 1px solid #dfe7e3;
+            padding: 28px 18px;
+            box-sizing: border-box;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #16311f;
+            text-decoration: none;
+            margin-bottom: 28px;
+        }
+        .brand-mark {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #dfeee3;
+            object-fit: contain;
+            padding: 6px;
+        }
+        .brand strong {
+            display: block;
+            font-size: 1.15rem;
+        }
+        .brand small {
+            display: block;
+            font-size: 0.72rem;
+            color: #5d6d67;
+        }
+        .nav-caption {
+            margin: 10px 8px 12px;
+            font-size: 0.72rem;
+            color: #65736d;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .side-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            color: #23352d;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .nav-link.active,
+        .nav-link:hover {
+            background: #eaf5ed;
+            color: #0b4a34;
+        }
+        .sidebar-bottom {
+            margin-top: 36px;
+            padding: 16px 12px;
+            border-radius: 18px;
+            background: linear-gradient(180deg, #f4f9f5, #edf2ef);
+            border: 1px solid #dfe9e4;
+        }
+        .sidebar-callout {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #1d2a2b;
+        }
+        .callout-icon {
+            font-size: 1.1rem;
+            color: #0d6f4d;
+        }
+        .sidebar-footnote {
+            margin-top: 14px;
+            font-size: 0.76rem;
+            color: #5d6d67;
+        }
+        .main-area {
+            flex: 1;
+            padding: 22px 28px 40px;
+        }
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 4px 20px;
+        }
+        .breadcrumb {
+            color: #4c5d58;
+            font-size: 0.85rem;
+        }
+        .breadcrumb strong {
+            color: #1b2d2e;
+        }
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .prototype-badge {
+            background: #e7f4ea;
+            color: #0a5d46;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+        .button {
+            border: 0;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #0f8a5a, #0e6d8c);
+            color: white;
+            padding: 12px 18px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .button-light {
+            background: #ffffff;
+            color: #1c2b2d;
+            border: 1px solid #cfe0d5;
+        }
+        .page-wrap {
+            max-width: 1180px;
+            margin: 10px auto 0;
+        }
+        .welcome {
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            align-items: end;
+            padding: 22px 0 28px;
+        }
+        .eyebrow {
+            margin: 0 0 10px;
+            color: #557063;
+            font-weight: 700;
+            font-size: 0.74rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+        h1 {
+            margin: 0;
+            font-size: clamp(2.2rem, 4vw, 3.5rem);
+            line-height: 1.08;
+            color: #1b2d2e;
+        }
+        .welcome-description {
+            margin: 12px 0 0;
+            max-width: 560px;
+            color: #485d59;
+            font-size: 1.05rem;
+        }
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(200px, 1fr));
+            gap: 18px;
+            margin: 10px 0 26px;
+        }
+        .overview-card {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(105, 117, 133, 0.15);
+            border-radius: 18px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 16px 35px rgba(15, 32, 52, 0.04);
+        }
+        .overview-icon {
+            display: grid;
+            place-items: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: #edf8f1;
+            color: #0f7d58;
+            font-size: 1.4rem;
+        }
+        .overview-card strong {
+            display: block;
+            font-size: 1.5rem;
+            color: #1b2d2e;
+        }
+        .overview-card span {
+            display: block;
+            color: #566d69;
+            font-size: 0.82rem;
+            line-height: 1.4;
+        }
+        .search-box {
+            background: rgba(255,255,255,0.84);
+            border: 1px solid rgba(105,117,133,0.14);
+            border-radius: 22px;
+            padding: 26px 26px 18px;
+            box-shadow: 0 22px 50px rgba(15, 32, 52, 0.06);
+            margin: 10px 0 28px;
+        }
+        .search-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        .search-heading h2 {
+            margin: 0;
+            color: #1b2d2e;
+            font-size: clamp(1.55rem, 2vw, 2.3rem);
+        }
+        .search-decoration {
+            font-size: 2rem;
+            color: #0d6f4d;
+        }
+        .search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+        .search-input-wrap {
+            flex: 1 1 500px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f6faf7;
+            border: 1px solid #dfe9e4;
+            border-radius: 14px;
+            padding: 14px 16px;
+            color: #5d6d67;
+        }
+        .search-input-wrap input {
+            border: 0;
+            background: transparent;
+            width: 100%;
+            font-size: 1rem;
+            outline: none;
+            color: #1b2d2e;
+        }
+        .quick-searches {
+            margin-top: 18px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            color: #4c5d58;
+            font-size: 0.9rem;
+        }
+        .quick-searches button {
+            border: 1px solid #dfe9e4;
+            background: #ffffff;
+            border-radius: 999px;
+            padding: 8px 12px;
+            color: #234d44;
+            font-weight: 600;
+        }
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 24px;
+        }
+        .section-card {
+            background: rgba(255,255,255,0.84);
+            border: 1px solid rgba(105,117,133,0.14);
+            border-radius: 22px;
+            padding: 22px;
+            box-shadow: 0 18px 40px rgba(15, 32, 52, 0.05);
+        }
+        .section-header {
+            margin-bottom: 18px;
+        }
+        .section-header h2 {
+            margin: 0;
+            color: #1b2d2e;
+            font-size: clamp(1.3rem, 2vw, 2rem);
+        }
+        .section-subtitle {
+            margin-top: 8px;
+            color: #5d6d67;
+            font-size: 0.9rem;
+        }
+        .paper-row {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .paper-meta-box {
+            display: flex;
+            gap: 14px;
+            padding: 12px 0;
+            border-bottom: 1px solid #edf0ef;
+        }
+        .file-mark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #edf9f1;
+            color: #0b6d51;
+            font-weight: 700;
+            font-size: 0.72rem;
+        }
+        .paper-meta-box h3 {
+            margin: 0 0 6px;
+            color: #1b2d2e;
+            font-size: 1.1rem;
+        }
+        .paper-meta-box p {
+            margin: 0;
+            color: #5d6d67;
+            font-size: 0.88rem;
+        }
+        .paper-tags {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .tag {
+            background: #f0f6f3;
+            color: #255b4b;
+            border-radius: 999px;
+            padding: 5px 10px;
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+        .assistant-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .assistant-avatar {
+            display: inline-grid;
+            place-items: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #dff7eb, #dfeef5);
+            color: #0c704f;
+            font-size: 1.4rem;
+        }
+        .online-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            margin-right: 8px;
+            border-radius: 50%;
+            background: #1f9d6a;
+            vertical-align: middle;
+        }
+        .chat-messages {
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .chat-bubble {
+            background: #f5faf6;
+            border: 1px solid #ddeae0;
+            border-radius: 14px;
+            padding: 14px 16px;
+            color: #273d39;
+            line-height: 1.5;
+        }
+        .prototype-note {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 24px;
+            background: rgba(255,255,255,0.84);
+            border: 1px solid rgba(105,117,133,0.14);
+            border-radius: 16px;
+            padding: 14px 18px;
+            color: #40555b;
+        }
+        .page-footer {
+            margin-top: 18px;
+            text-align: center;
+            color: #5a6d68;
+            font-size: 0.8rem;
+        }
+        @media (max-width: 920px) {
+            .app-shell {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                border-right: 0;
+                border-bottom: 1px solid #dfe7e3;
+            }
+            .content-grid,
+            .overview-grid {
+                grid-template-columns: 1fr;
+            }
+            .welcome {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="app-shell">
-    <aside class="sidebar" aria-label="Main navigation">
-      <a class="brand" href="research.html">
-        <img class="brand-mark" src="sti-logo.png" alt="" />
-        <span><strong>Research Hub</strong><small>STI College Alaminos</small></span>
-      </a>
-      <p class="nav-caption">Workspace</p>
-      <nav class="side-nav">
-        <a class="nav-link active" href="repository.html"><span aria-hidden="true">▤</span> Repository</a>
-        <a class="nav-link" href="search.html"><span aria-hidden="true">⌕</span> Smart search</a>
-        <a class="nav-link" href="assistant.html"><span aria-hidden="true">✳</span> Research assistant</a>
-        <a class="nav-link" href="about.html"><span aria-hidden="true">ⓘ</span> About the project</a>
-      </nav>
-      <div class="sidebar-bottom">
-        <div class="sidebar-callout">
-          <span class="callout-icon" aria-hidden="true">✦</span>
-          <strong>Good research starts here.</strong>
-          <p>Explore capstones, studies, and ideas from the STI Alaminos community.</p>
-        </div>
-        <p class="sidebar-footnote">Private local repository<br />Stored on this computer</p>
-      </div>
-    </aside>
-
-    <main class="main-area" id="home">
-      <header class="topbar">
-        <div class="breadcrumb">Library <span aria-hidden="true">/</span> <strong>Research repository</strong></div>
-        <div class="topbar-right">
-          <span class="prototype-badge"><span aria-hidden="true">●</span> LOCAL APP</span>
-          <button class="button button-light" type="button">Log in</button>
-        </div>
-      </header>
-
-      <div class="page-wrap">
-        <section class="welcome" aria-labelledby="page-title">
-          <div>
-            <p class="eyebrow">STI COLLEGE ALAMINOS</p>
-            <h1 id="page-title">Find the work that moves you.</h1>
-            <p class="welcome-description">A home for student research, capstone projects, and shared knowledge.</p>
-          </div>
-          <button class="button" type="button">＋ Add a paper</button>
-        </section>
-
-        <section class="overview-grid" aria-label="Repository overview">
-          <article class="overview-card">
-            <span class="overview-icon icon-leaf" aria-hidden="true">▤</span>
-            <div><strong>120</strong><span>Research papers</span></div>
-          </article>
-          <article class="overview-card">
-            <span class="overview-icon icon-sun" aria-hidden="true">⌕</span>
-            <div><strong>Explore</strong><span>By topic, course, or question</span></div>
-          </article>
-          <article class="overview-card">
-            <span class="overview-icon icon-blue" aria-hidden="true">◷</span>
-            <div><strong>Anytime</strong><span>Designed for every screen</span></div>
-          </article>
-        </section>
-
-        <section class="search-box" id="search" aria-labelledby="search-title">
-          <div class="search-heading">
-            <div>
-              <p class="eyebrow">DISCOVER SOMETHING NEW</p>
-              <h2 id="search-title">What are you looking for?</h2>
-            </div>
-            <span class="search-decoration" aria-hidden="true">✳</span>
-          </div>
-          <form class="search-form">
-            <label class="search-input-wrap">
-              <span aria-hidden="true">⌕</span>
-              <input type="search" placeholder="Ask a question or search a title, topic, author…" aria-label="Search academic papers" />
-            </label>
-            <button class="button" type="submit">Search papers <span aria-hidden="true">→</span></button>
-          </form>
-          <div class="quick-searches">
-            <span>Popular:</span>
-            <button type="button">Artificial intelligence</button>
-            <button type="button">Student learning</button>
-            <button type="button">Mobile apps</button>
-          </div>
-        </section>
-
-        <div class="content-grid">
-          <section class="section-card repository" id="repository" aria-labelledby="repository-title">
-            <header class="section-header">
-              <div>
-                <p class="eyebrow">THE COLLECTION</p>
-                <h2 id="repository-title">Research papers</h2>
-                <p class="section-subtitle">Browse the local library</p>
-              </div>
-            </header>
-            <div class="paper-row">
-              <div class="paper-meta-box">
-                <span class="file-mark">TXT</span>
-                <div>
-                  <h3>A Study on the Use of Artificial Intelligence Tools in Student Learning</h3>
-                  <p>Author · 2025</p>
-                  <div class="paper-tags">
-                    <span class="tag">AI</span>
-                    <span class="tag">Education</span>
-                  </div>
+    <div class="app-shell">
+        <aside class="sidebar" aria-label="Main navigation">
+            <a class="brand" href="#home">
+                <img class="brand-mark" src="sti-logo.png" alt="">
+                <span><strong>Research Hub</strong><small>STI College Alaminos</small></span>
+            </a>
+            <p class="nav-caption">Workspace</p>
+            <nav class="side-nav">
+                <a class="nav-link active" href="#home"><span aria-hidden="true">▤</span> Repository</a>
+                <a class="nav-link" href="#search"><span aria-hidden="true">⌕</span> Smart search</a>
+                <a class="nav-link" href="#assistant"><span aria-hidden="true">✳</span> Research assistant</a>
+                <a class="nav-link" href="#project-info"><span aria-hidden="true">ⓘ</span> About the project</a>
+            </nav>
+            <div class="sidebar-bottom">
+                <div class="sidebar-callout">
+                    <span class="callout-icon" aria-hidden="true">✦</span>
+                    <strong>Good research starts here.</strong>
+                    <p>Explore capstones, studies, and ideas from the STI community.</p>
                 </div>
-              </div>
+                <p class="sidebar-footnote">Private local repository<br>Stored on this computer</p>
             </div>
-          </section>
-
-          <section class="section-card assistant" id="assistant" aria-labelledby="assistant-title">
-            <header class="section-header assistant-header">
-              <span class="assistant-avatar" aria-hidden="true">✳</span>
-              <div>
-                <p class="eyebrow">YOUR RESEARCH COMPANION</p>
-                <h2 id="assistant-title">Research assistant</h2>
-                <p class="section-subtitle"><span class="online-dot"></span> Free local search · your saved papers</p>
-              </div>
-            </header>
-            <div class="chat-messages">
-              <div class="chat-bubble assistant-bubble">Hi! I can search the papers in your local library and compare research records.</div>
-            </div>
-          </section>
-        </div>
-
-        <aside class="prototype-note" id="project-info">
-          <span aria-hidden="true">ⓘ</span>
-          <p><strong>Private local library</strong> — Accounts, paper details, and uploaded documents are stored on this computer.</p>
         </aside>
-        <footer class="page-footer">STI College Alaminos · Private local research library</footer>
-      </div>
-    </main>
-  </div>
+
+        <main class="main-area" id="home">
+            <header class="topbar">
+                <div class="breadcrumb">Library <span aria-hidden="true">/</span> <strong>Research repository</strong></div>
+                <div class="topbar-right">
+                    <span class="prototype-badge"><span aria-hidden="true">●</span> LOCAL APP</span>
+                    <button class="button button-light" type="button">Log in</button>
+                </div>
+            </header>
+
+            <div class="page-wrap">
+                <section class="welcome" aria-labelledby="page-title">
+                    <div>
+                        <p class="eyebrow">STI COLLEGE ALAMINOS</p>
+                        <h1 id="page-title">Find the work that moves you.</h1>
+                        <p class="welcome-description">A home for student research, capstone projects, and shared knowledge.</p>
+                    </div>
+                    <button class="button" type="button">＋ Add a paper</button>
+                </section>
+
+                <section class="overview-grid" aria-label="Repository overview">
+                    <article class="overview-card">
+                        <span class="overview-icon" aria-hidden="true">▤</span>
+                        <div><strong>120</strong><span>Research papers</span></div>
+                    </article>
+                    <article class="overview-card">
+                        <span class="overview-icon" aria-hidden="true">⌕</span>
+                        <div><strong>Explore</strong><span>By topic, course, or question</span></div>
+                    </article>
+                    <article class="overview-card">
+                        <span class="overview-icon" aria-hidden="true">◷</span>
+                        <div><strong>Anytime</strong><span>Designed for every screen</span></div>
+                    </article>
+                </section>
+
+                <section class="search-box" id="search" aria-labelledby="search-title">
+                    <div class="search-heading">
+                        <div>
+                            <p class="eyebrow">DISCOVER SOMETHING NEW</p>
+                            <h2 id="search-title">What are you looking for?</h2>
+                        </div>
+                        <span class="search-decoration" aria-hidden="true">✳</span>
+                    </div>
+                    <form class="search-form">
+                        <label class="search-input-wrap">
+                            <span aria-hidden="true">⌕</span>
+                            <input type="search" placeholder="Ask a question or search a title, topic, author…" aria-label="Search academic papers">
+                        </label>
+                        <button class="button" type="submit">Search papers <span aria-hidden="true">→</span></button>
+                    </form>
+                    <div class="quick-searches">
+                        <span>Popular:</span>
+                        <button type="button">Artificial intelligence</button>
+                        <button type="button">Student learning</button>
+                        <button type="button">Mobile apps</button>
+                    </div>
+                </section>
+
+                <div class="content-grid">
+                    <section class="section-card" id="repository" aria-labelledby="repository-title">
+                        <header class="section-header">
+                            <div>
+                                <p class="eyebrow">THE COLLECTION</p>
+                                <h2 id="repository-title">Research papers</h2>
+                                <p class="section-subtitle">Browse the local library</p>
+                            </div>
+                        </header>
+                        <div class="paper-row">
+                            <div class="paper-meta-box">
+                                <span class="file-mark">TXT</span>
+                                <div>
+                                    <h3>A Study on the Use of Artificial Intelligence Tools in Student Learning</h3>
+                                    <p>Author · 2025</p>
+                                    <div class="paper-tags">
+                                        <span class="tag">AI</span>
+                                        <span class="tag">Education</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="section-card" id="assistant" aria-labelledby="assistant-title">
+                        <header class="section-header assistant-header">
+                            <span class="assistant-avatar" aria-hidden="true">✳</span>
+                            <div>
+                                <p class="eyebrow">YOUR RESEARCH COMPANION</p>
+                                <h2 id="assistant-title">Research assistant</h2>
+                                <p class="section-subtitle"><span class="online-dot"></span> Free local search · your saved papers</p>
+                            </div>
+                        </header>
+                        <div class="chat-messages">
+                            <div class="chat-bubble">Hi! I can search the papers in your local library and compare research records.</div>
+                        </div>
+                    </section>
+                </div>
+
+                <aside class="prototype-note" id="project-info">
+                    <span aria-hidden="true">ⓘ</span>
+                    <p><strong>Private local library</strong> — Accounts, paper details, and uploaded documents are stored on this computer.</p>
+                </aside>
+                <footer class="page-footer">STI College Alaminos · Private local research library</footer>
+            </div>
+        </main>
+    </div>
 </body>
 </html>
