@@ -7,21 +7,99 @@
     <meta name="description" content="Explore and discover student research at STI College Alaminos.">
     <title>Research Hub | STI College Alaminos</title>
     <link rel="stylesheet" href="researchpart2.css">
+    <style>
+        .app-page {
+            display: none;
+            animation: pageFade 260ms ease;
+        }
+
+        .app-page.active {
+            display: block;
+        }
+
+        @keyframes pageFade {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .about-page-wrap {
+            padding: 2rem 0 3rem;
+        }
+
+        .about-page-card {
+            background: rgba(255, 255, 255, 0.78);
+            border: 1px solid rgba(105, 117, 133, 0.18);
+            border-radius: 22px;
+            box-shadow: 0 22px 50px rgba(15, 32, 52, 0.08);
+            padding: 2rem;
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        .about-page-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .about-page-header h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin: 0 0 0.75rem;
+            color: #1f2d3d;
+        }
+
+        .about-page-header p {
+            margin: 0;
+            color: #586777;
+            line-height: 1.7;
+            max-width: 760px;
+        }
+
+        .about-page-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .about-page-grid article {
+            background: rgba(245, 247, 245, 0.8);
+            border: 1px solid rgba(105, 117, 133, 0.15);
+            border-radius: 16px;
+            padding: 1rem 1.1rem;
+        }
+
+        .about-page-grid h3 {
+            margin: 0 0 0.5rem;
+            color: #20304a;
+            font-size: 1.05rem;
+        }
+
+        .about-page-grid p {
+            margin: 0;
+            color: #5b697d;
+            line-height: 1.6;
+        }
+    </style>
     <script src="part3.script.js" defer></script>
 </head>
 <body>
     <div class="app-shell">
         <aside class="sidebar" aria-label="Main navigation">
-            <a class="brand" href="#home">
+            <a class="brand" href="/repository" data-route="repository">
                 <img class="brand-mark" src="sti-logo.png" alt="">
                 <span><strong>Research Hub</strong><small>STI College Alaminos</small></span>
             </a>
             <p class="nav-caption">Workspace</p>
             <nav class="side-nav">
-                <a class="nav-link active" href="#repository"><span aria-hidden="true">▤</span> Repository</a>
-                <a class="nav-link" href="#search"><span aria-hidden="true">⌕</span> Smart search</a>
-                <a class="nav-link" href="#assistant"><span aria-hidden="true">✳</span> Research assistant</a>
-                <a class="nav-link" href="#project-info"><span aria-hidden="true">ⓘ</span> About the project</a>
+                <a class="nav-link active" href="/repository" data-route="repository"><span aria-hidden="true">▤</span> Repository</a>
+                <a class="nav-link" href="/smart-search" data-route="smart-search"><span aria-hidden="true">⌕</span> Smart search</a>
+                <a class="nav-link" href="/research-assistant" data-route="assistant"><span aria-hidden="true">✳</span> Research assistant</a>
+                <a class="nav-link" href="/about" data-route="about"><span aria-hidden="true">ⓘ</span> About the project</a>
             </nav>
             <div class="sidebar-bottom">
                 <div class="sidebar-callout">
@@ -46,106 +124,142 @@
                 </div>
             </header>
 
-            <div class="page-wrap">
-                <section class="welcome" aria-labelledby="page-title">
-                    <div>
-                        <p class="eyebrow">STI COLLEGE ALAMINOS</p>
-                        <h1 id="page-title">Find the work that moves you.</h1>
-                        <p class="welcome-description">A home for student research, capstone projects, and shared knowledge.</p>
-                    </div>
-                    <button class="button" id="upload-button" type="button" disabled>＋ Add a paper</button>
-                </section>
-
-                <section class="overview-grid" aria-label="Repository overview">
-                    <article class="overview-card">
-                        <span class="overview-icon icon-leaf" aria-hidden="true">▤</span>
-                        <div><strong id="paper-count">0</strong><span>Research papers</span></div>
-                    </article>
-                    <article class="overview-card">
-                        <span class="overview-icon icon-sun" aria-hidden="true">⌕</span>
-                        <div><strong>Explore</strong><span>By topic, course, or question</span></div>
-                    </article>
-                    <article class="overview-card">
-                        <span class="overview-icon icon-blue" aria-hidden="true">◷</span>
-                        <div><strong>Anytime</strong><span>Designed for every screen</span></div>
-                    </article>
-                </section>
-
-                <section class="search-box" id="search" aria-labelledby="search-title">
-                    <div class="search-heading">
+            <div class="app-page active" data-page="repository" id="repository-page">
+                <div class="page-wrap">
+                    <section class="welcome" aria-labelledby="page-title">
                         <div>
-                            <p class="eyebrow">DISCOVER SOMETHING NEW</p>
-                            <h2 id="search-title">What are you looking for?</h2>
+                            <p class="eyebrow">STI COLLEGE ALAMINOS</p>
+                            <h1 id="page-title">Find the work that moves you.</h1>
+                            <p class="welcome-description">A home for student research, capstone projects, and shared knowledge.</p>
                         </div>
-                        <span class="search-decoration" aria-hidden="true">✳</span>
-                    </div>
-                    <form class="search-form" id="search-form">
-                        <label class="search-input-wrap">
-                            <span aria-hidden="true">⌕</span>
-                            <input id="search-input" type="search" placeholder="Ask a question or search a title, topic, author…" aria-label="Search academic papers">
-                        </label>
-                        <button class="button" type="submit">Search papers <span aria-hidden="true">→</span></button>
-                    </form>
-                    <div class="quick-searches">
-                        <span>Popular:</span>
-                        <button type="button" data-query="artificial intelligence">Artificial intelligence</button>
-                        <button type="button" data-query="student learning">Student learning</button>
-                        <button type="button" data-query="mobile application">Mobile apps</button>
-                    </div>
-                </section>
-
-                <div class="content-grid">
-                    <section class="section-card repository" id="repository" aria-labelledby="repository-title">
-                        <header class="section-header">
-                            <div>
-                                <p class="eyebrow">THE COLLECTION</p>
-                                <h2 id="repository-title">Research papers</h2>
-                                <p class="section-subtitle" id="result-count" aria-live="polite">Loading papers…</p>
-                            </div>
-                            <div class="filter-group">
-                                <label class="filter-wrap">
-                                    <span class="sr-only">Filter by topic</span>
-                                    <select id="topic-filter" aria-label="Filter by topic"><option value="all">All topics</option></select>
-                                </label>
-                                <label class="filter-wrap">
-                                    <span class="sr-only">Filter by course</span>
-                                    <select id="course-filter" aria-label="Filter by course"><option value="all">All courses</option></select>
-                                </label>
-                            </div>
-                        </header>
-                        <div id="document-list" aria-live="polite"></div>
-                        <p class="empty-state" id="empty-state" hidden>No papers found. Try another search or topic.</p>
+                        <button class="button" id="upload-button" type="button" disabled>＋ Add a paper</button>
                     </section>
 
-                    <section class="section-card assistant" id="assistant" aria-labelledby="assistant-title">
-                        <header class="section-header assistant-header">
-                            <span class="assistant-avatar" aria-hidden="true">✳</span>
+                    <section class="overview-grid" aria-label="Repository overview">
+                        <article class="overview-card">
+                            <span class="overview-icon icon-leaf" aria-hidden="true">▤</span>
+                            <div><strong id="paper-count">0</strong><span>Research papers</span></div>
+                        </article>
+                        <article class="overview-card">
+                            <span class="overview-icon icon-sun" aria-hidden="true">⌕</span>
+                            <div><strong>Explore</strong><span>By topic, course, or question</span></div>
+                        </article>
+                        <article class="overview-card">
+                            <span class="overview-icon icon-blue" aria-hidden="true">◷</span>
+                            <div><strong>Anytime</strong><span>Designed for every screen</span></div>
+                        </article>
+                    </section>
+
+                    <section class="search-box" id="search" aria-labelledby="search-title">
+                        <div class="search-heading">
                             <div>
-                                <p class="eyebrow">YOUR RESEARCH COMPANION</p>
-                                <h2 id="assistant-title">Research assistant</h2>
-                                <p class="section-subtitle"><span class="online-dot"></span> Free local search · your saved papers</p>
+                                <p class="eyebrow">DISCOVER SOMETHING NEW</p>
+                                <h2 id="search-title">What are you looking for?</h2>
                             </div>
-                        </header>
-                        <div class="chat-messages" id="chat-messages" aria-live="polite" aria-label="Assistant conversation">
-                            <div class="chat-bubble assistant-bubble">Hi! I can search the papers in your local library, summarize saved abstracts, and compare research records. Try asking “Find research about online learning.”</div>
+                            <span class="search-decoration" aria-hidden="true">✳</span>
                         </div>
-                        <div class="suggestion-row" id="chat-suggestions" aria-label="Suggested questions">
-                            <button class="suggestion" type="button" data-question="Find papers about artificial intelligence">AI research</button>
-                            <button class="suggestion" type="button" data-question="What research is about student learning?">Student learning</button>
-                        </div>
-                        <form class="chat-form" id="chat-form">
-                            <input id="chat-input" type="text" placeholder="Ask a research question…" aria-label="Ask a research question" required>
-                            <button type="submit" aria-label="Send message">↑</button>
+                        <form class="search-form" id="search-form">
+                            <label class="search-input-wrap">
+                                <span aria-hidden="true">⌕</span>
+                                <input id="search-input" type="search" placeholder="Ask a question or search a title, topic, author…" aria-label="Search academic papers">
+                            </label>
+                            <button class="button" type="submit">Search papers <span aria-hidden="true">→</span></button>
                         </form>
-                        <p class="chat-note">Search runs on this computer at no AI API cost. Upload real research files to build the library.</p>
+                        <div class="quick-searches">
+                            <span>Popular:</span>
+                            <button type="button" data-query="artificial intelligence">Artificial intelligence</button>
+                            <button type="button" data-query="student learning">Student learning</button>
+                            <button type="button" data-query="mobile application">Mobile apps</button>
+                        </div>
                     </section>
-                </div>
 
-                <aside class="prototype-note" id="project-info">
-                    <span aria-hidden="true">ⓘ</span>
-                    <p><strong>Private local library</strong> — Accounts, paper details, and uploaded documents are stored on this computer. The assistant uses free local search of your saved titles and abstracts; it does not send them to an AI provider.</p>
-                </aside>
-                <footer class="page-footer">STI College Alaminos · Private local research library</footer>
+                    <div class="content-grid">
+                        <section class="section-card repository" id="repository" aria-labelledby="repository-title">
+                            <header class="section-header">
+                                <div>
+                                    <p class="eyebrow">THE COLLECTION</p>
+                                    <h2 id="repository-title">Research papers</h2>
+                                    <p class="section-subtitle" id="result-count" aria-live="polite">Loading papers…</p>
+                                </div>
+                                <div class="filter-group">
+                                    <label class="filter-wrap">
+                                        <span class="sr-only">Filter by topic</span>
+                                        <select id="topic-filter" aria-label="Filter by topic"><option value="all">All topics</option></select>
+                                    </label>
+                                    <label class="filter-wrap">
+                                        <span class="sr-only">Filter by course</span>
+                                        <select id="course-filter" aria-label="Filter by course"><option value="all">All courses</option></select>
+                                    </label>
+                                </div>
+                            </header>
+                            <div id="document-list" aria-live="polite"></div>
+                            <p class="empty-state" id="empty-state" hidden>No papers found. Try another search or topic.</p>
+                        </section>
+
+                        <section class="section-card assistant" id="assistant" aria-labelledby="assistant-title">
+                            <header class="section-header assistant-header">
+                                <span class="assistant-avatar" aria-hidden="true">✳</span>
+                                <div>
+                                    <p class="eyebrow">YOUR RESEARCH COMPANION</p>
+                                    <h2 id="assistant-title">Research assistant</h2>
+                                    <p class="section-subtitle"><span class="online-dot"></span> Free local search · your saved papers</p>
+                                </div>
+                            </header>
+                            <div class="chat-messages" id="chat-messages" aria-live="polite" aria-label="Assistant conversation">
+                                <div class="chat-bubble assistant-bubble">Hi! I can search the papers in your local library, summarize saved abstracts, and compare research records. Try asking “Find research on AI in learning” or “What papers are on mobile applications?”</div>
+                            </div>
+                            <div class="suggestion-row" id="chat-suggestions" aria-label="Suggested questions">
+                                <button class="suggestion" type="button" data-question="Find papers about artificial intelligence">AI research</button>
+                                <button class="suggestion" type="button" data-question="What research is about student learning?">Student learning</button>
+                            </div>
+                            <form class="chat-form" id="chat-form">
+                                <input id="chat-input" type="text" placeholder="Ask a research question…" aria-label="Ask a research question" required>
+                                <button type="submit" aria-label="Send message">↑</button>
+                            </form>
+                            <p class="chat-note">Search runs on this computer at no AI API cost. Upload real research files to build the library.</p>
+                        </section>
+                    </div>
+
+                    <aside class="prototype-note" id="project-info">
+                        <span aria-hidden="true">ⓘ</span>
+                        <p><strong>Private local library</strong> — Accounts, paper details, and uploaded documents are stored on this computer. The assistant uses free local search of your saved records and uploaded files.</p>
+                    </aside>
+                    <footer class="page-footer">STI College Alaminos · Private local research library</footer>
+                </div>
+            </div>
+
+            <div class="app-page" data-page="about" id="about-page">
+                <div class="page-wrap about-page-wrap">
+                    <div class="about-page-card">
+                        <div class="about-page-header">
+                            <p class="eyebrow">ABOUT THE PROJECT</p>
+                            <h1>Research Hub</h1>
+                            <p>
+                                Research Hub is a private local repository for STI College Alaminos students to discover, organize,
+                                and review research work. The platform keeps the library focused on students and faculty by making it easy
+                                to upload papers, search by keyword or metadata, and review new submissions before publication.
+                            </p>
+                        </div>
+                        <div class="about-page-grid">
+                            <article>
+                                <h3>Purpose</h3>
+                                <p>Preserve academic work in a single searchable place and make it easier to discover relevant studies.</p>
+                            </article>
+                            <article>
+                                <h3>Features</h3>
+                                <p>Search by titles, topics, courses, authors, and abstract content with a shared local repository view.</p>
+                            </article>
+                            <article>
+                                <h3>Access</h3>
+                                <p>Accounts are managed by the system administrator, with private access and local storage for the project.</p>
+                            </article>
+                            <article>
+                                <h3>Team</h3>
+                                <p>Built for STI College Alaminos to support research collaboration and digital access to academic collections.</p>
+                            </article>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -196,7 +310,7 @@
                 <label class="form-field">Department<input id="paper-department" name="department" required></label>
             </div>
             <label class="form-field">Abstract<textarea id="paper-abstract" name="abstract" rows="4" required></textarea></label>
-            <label class="form-field">Research file (PDF, DOCX, or TXT)<input id="paper-file" name="file" type="file" accept=".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"><small id="file-help">The selected file is stored by the research library.</small></label>
+            <label class="form-field">Research file (PDF, DOCX, or TXT)<input id="paper-file" name="file" type="file" accept=".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"></label>
             <p class="form-message" id="paper-form-message" role="status"></p>
             <div class="modal-actions"><button class="button button-light" type="button" data-close="paper-form-modal">Cancel</button><button class="button" id="paper-submit-button" type="submit">Save paper</button></div>
         </form>
